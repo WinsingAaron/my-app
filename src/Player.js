@@ -9,11 +9,16 @@ export default function Player(props) {
 
 
     const handleConnection = () => {
-        refPixelStreaming.current.connector.initConnection()
+        // refPixelStreaming.current.connector.initConnection()
     }
 
     useEffect(() => {
         window.addEventListener('resize', handleResize);
+
+        refPixelStreaming.current.cls.initConnection({
+            host: 'http://127.0.0.1',
+            port: 80,
+        })
     }, []);
 
     const handleResize = () => {
@@ -23,7 +28,9 @@ export default function Player(props) {
         const height = window.innerHeight
 
         //const emitConsole = refPixelStreaming.current.cls.client.emitConsole
-        const emitConsole = PS.cls.client.emitConsole
+        // const emitConsole = PS.cls.client.emitConsole
+
+        const emitConsole = (payload) => refPixelStreaming.current.cls.client.emitConsole(payload)
 
         emitConsole(`PixelStreaming.Capturer.UseBackBufferSize 0`)
         emitConsole(`PixelStreaming.Capturer.CaptureSize ${width}x${height}`)
@@ -56,11 +63,6 @@ export default function Player(props) {
                 settings={{
                     volume: 1,
                     quality: 1,
-                    connectOnStart: false,
-
-                    host: 'http://127.0.0.1',
-                    port: 80,
-
                     pixelStreaming: {
                         warnTimeout: 120,
                         closeTimeout: 10,
